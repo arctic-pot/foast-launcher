@@ -6,6 +6,7 @@ body:
     attributes:
       value: '请**尽可能多**地提供信息以方便我们处理'
   - type: checkboxes
+    id: checklist
     attributes:
       label: 检查清单
       description: 请在完成这些步骤后再发布问题
@@ -30,29 +31,35 @@ body:
         - Linux
         - MacOS
   - type: input
+    id: launcher-version
     attributes:
       label: 启动器版本
     validations:
       required: true
   - type: textarea
+    id: description
     attributes:
       label: 简述问题
       description: 应该包含期待的结果和实际的结果
     validations:
       required: true
   - type: textarea
+    id: hardware
     attributes:
       label: 你的硬件
   - type: textarea
+    id: modifications
     attributes:
       label: 你作出的更改
       description: 例如，Optifine HD，Forge，Fabric，LabyMod
   - type: textarea
+    id: reproduce
     attributes:
       label: 如何复现问题
     validations:
       required: true
   - type: textarea
+    id: more-info
     attributes:
       label: 更多的信息
       description: 例如日志，你提供的信息越多，我们就能越容易解决问题
