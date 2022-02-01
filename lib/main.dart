@@ -165,6 +165,6 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    Directory('./.minecraft').createSync(recursive: true);
+    Directory('./.minecraft').create();
   }
 }
