@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foast_launcher/i18n/localizations.dart';
 import 'package:foast_launcher/pages/accounts_page.dart';
 import 'package:foast_launcher/pages/games_page.dart';
 
@@ -35,7 +36,8 @@ class _LaunchPageState extends State<LaunchPage> {
                                       builder: (context) => const GamesPage()));
                                 },
                                 icon: const Icon(Icons.widgets_rounded),
-                                label: const Text('Manage Version'),
+                                label: Text(AppLocalizations.of(context)
+                                    .getTranslation('manage_versions')),
                               ),
                             ),
                             const SizedBox(height: 10),
@@ -49,7 +51,8 @@ class _LaunchPageState extends State<LaunchPage> {
                                           const AccountsPage()));
                                 },
                                 icon: const Icon(Icons.account_circle_rounded),
-                                label: const Text('Manage Account'),
+                                label: Text(AppLocalizations.of(context)
+                                    .getTranslation('manage_accounts')),
                               ),
                             ),
                           ],
@@ -64,7 +67,7 @@ class _LaunchPageState extends State<LaunchPage> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    'Launch',
+                                    t(context, 'launch'),
                                     style: TextStyle(
                                         fontSize: Theme.of(context)
                                             .textTheme

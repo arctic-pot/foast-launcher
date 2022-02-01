@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foast_launcher/i18n/localizations.dart';
 import 'package:foast_launcher/pages/app_bar.dart';
 
 class DownloadPage extends StatefulWidget {
@@ -12,11 +13,11 @@ class _DownloadPageState extends State<DownloadPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
-        children: const [
+        children: [
           SubpageAppBar(
-            title: 'Download',
+            title: t(context, 'download'),
           ),
-          Expanded(flex: 1, child: Text('WIP'))
+          const Expanded(flex: 1, child: Text('WIP'))
         ],
       ),
     );

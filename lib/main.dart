@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:foast_launcher/i18n/localizations.dart';
 import 'package:foast_launcher/pages/about_page.dart';
 import 'package:foast_launcher/pages/accounts_page.dart';
 import 'package:foast_launcher/pages/download_page.dart';
@@ -25,6 +27,15 @@ class App extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
+        localizationsDelegates: [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          AppLocalizationsDelegate.delegate
+        ],
+        supportedLocales: const [
+          Locale('en', 'US'),
+          Locale('zh', 'CN'),
+        ],
         home: const HomePage(title: 'Flutter Demo Home Page'));
   }
 }
@@ -107,19 +118,19 @@ class _HomePageState extends State<HomePage> {
                 child: ListView(
                   children: [
                     _buildPageSwitcher(
-                        title: 'Games',
+                        title: t(context, 'games'),
                         icon: Icons.widgets_rounded,
                         to: const GamesPage()),
                     _buildPageSwitcher(
-                        title: 'Accounts',
+                        title: t(context, 'accounts'),
                         icon: Icons.account_circle_rounded,
                         to: const AccountsPage()),
                     _buildPageSwitcher(
-                        title: 'Mods',
+                        title: t(context, 'mods'),
                         icon: Icons.extension_rounded,
                         to: const ModsPage()),
                     _buildPageSwitcher(
-                        title: 'Download',
+                        title: t(context, 'download'),
                         icon: Icons.download_rounded,
                         to: const DownloadPage()),
                     _buildPageSwitcher(
@@ -129,50 +140,15 @@ class _HomePageState extends State<HomePage> {
                         to: const OnlinePlayingPage()),
                     const Divider(),
                     _buildPageSwitcher(
-                        title: 'Settings',
+                        title: t(context, 'settings'),
                         icon: Icons.settings_rounded,
                         to: const SettingsPage()),
                     _buildPageSwitcher(
-                        title: 'About',
+                        title: t(context, 'about'),
                         icon: Icons.info_rounded,
                         to: const AboutPage())
                   ],
-                )
-                /*NavigationRail(
-                    selectedIndex: _page,
-                    onDestinationSelected: (int index) {
-                      setState(() {
-                        _page = index;
-                      });
-                    },
-                    extended: true,
-                    minExtendedWidth: 200,
-                    destinations: const [
-                      NavigationRailDestination(
-                          icon: Icon(Icons.videogame_asset_rounded),
-                          label: Text('Launch')),
-                      NavigationRailDestination(
-                          icon: Icon(Icons.widgets_rounded),
-                          label: Text('Games')),
-                      NavigationRailDestination(
-                          icon: Icon(Icons.account_circle_rounded),
-                          label: Text('Account')),
-                      NavigationRailDestination(
-                          icon: Icon(Icons.extension_rounded),
-                          label: Text('Mods')),
-                      NavigationRailDestination(
-                          icon: Icon(Icons.download_rounded),
-                          label: Text('Download')),
-                      NavigationRailDestination(
-                          icon: Icon(Icons.dns_rounded),
-                          label: Text('Online Playing')),
-                      NavigationRailDestination(
-                          icon: Icon(Icons.settings_rounded),
-                          label: Text('Settings')),
-                      NavigationRailDestination(
-                          icon: Icon(Icons.info_rounded), label: Text('Help')),
-                    ])*/
-                ,
+                ),
               ),
               const VerticalDivider(
                 width: 1,
@@ -184,5 +160,11 @@ class _HomePageState extends State<HomePage> {
             ],
           ))
     ]));
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    Directory('./.minecraft').createSync(recursive: true);
   }
 }

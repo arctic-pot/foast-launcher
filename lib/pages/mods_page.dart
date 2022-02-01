@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foast_launcher/i18n/localizations.dart';
 import 'package:foast_launcher/pages/app_bar.dart';
 
 class ModsPage extends StatefulWidget {
@@ -12,11 +13,11 @@ class _ModsPageState extends State<ModsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
-        children: const [
+        children: [
           SubpageAppBar(
-            title: 'Mods',
+            title: t(context, 'mods'),
           ),
-          Expanded(flex: 1, child: Text('WIP'))
+          const Expanded(flex: 1, child: Text('WIP'))
         ],
       ),
     );

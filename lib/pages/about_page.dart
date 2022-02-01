@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foast_launcher/i18n/localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:foast_launcher/pages/app_bar.dart';
 
@@ -10,6 +11,7 @@ class AboutPage extends StatefulWidget {
 
 class _AboutPageState extends State<AboutPage> {
   final double _width = 500;
+  final _listDivider = const Divider(height: 1);
 
   Widget _buildSection(Widget child) {
     return Container(
@@ -25,7 +27,7 @@ class _AboutPageState extends State<AboutPage> {
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Text(
         text,
-        style: Theme.of(context).textTheme.titleMedium,
+        style: Theme.of(context).textTheme.caption,
       ),
     );
   }
@@ -35,9 +37,8 @@ class _AboutPageState extends State<AboutPage> {
     return Scaffold(
       body: Column(
         children: [
-          const SubpageAppBar(
-            title: 'About',
-          ),
+          SubpageAppBar(
+            title: t(context, 'about')),
           Expanded(
             flex: 1,
             child: SingleChildScrollView(
@@ -52,8 +53,7 @@ class _AboutPageState extends State<AboutPage> {
                       style: Theme.of(context).textTheme.headline5,
                     ),
                     Text(
-                      'Not an official Minecraft Product. '
-                      'Not approved by or associated with Mojang.',
+                      t(context, 'disclaimer_mojang'),
                       style: Theme.of(context).textTheme.caption,
                     ),
                   ],
@@ -70,7 +70,7 @@ class _AboutPageState extends State<AboutPage> {
                       launch('https://github.com/TheColdPot');
                     },
                   ),
-                  const Divider(height: 1),
+                  _listDivider,
                   ListTile(
                     title: const Text('GitHub contributors'),
                     subtitle: const Text('Supported by community'),
@@ -92,7 +92,7 @@ class _AboutPageState extends State<AboutPage> {
                       launch('https://discord.gg/S6wGBKDXyT');
                     },
                   ),
-                  const Divider(height: 1),
+                  _listDivider,
                   ListTile(
                     title: const Text('GitHub'),
                     subtitle: const Text('The git repository'),
@@ -147,4 +147,5 @@ class _AboutPageState extends State<AboutPage> {
       ),
     );
   }
+
 }
