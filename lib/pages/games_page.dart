@@ -134,16 +134,19 @@ class _GamesPageState extends State<GamesPage> {
             const VerticalDivider(width: 1),
             Expanded(
                 flex: 1,
-                child: (_games?.isNotEmpty ?? true) ? GridView.count(
-                    crossAxisSpacing: 10.0,
-                    mainAxisSpacing: 10.0,
-                    padding: const EdgeInsets.all(10.0),
-                    crossAxisCount: 2,
-                    childAspectRatio: 4.5,
-                    controller: ScrollController(),
-                    children: _buildVersionCards(_games ?? [])) : Center(
-                  child: Text(t(context, 'no_games_installed'), style: Theme.of(context).textTheme.caption),
-                ))
+                child: (_games?.isNotEmpty ?? true)
+                    ? GridView.count(
+                        crossAxisSpacing: 10.0,
+                        mainAxisSpacing: 10.0,
+                        padding: const EdgeInsets.all(10.0),
+                        crossAxisCount: 2,
+                        childAspectRatio: 4.5,
+                        controller: ScrollController(),
+                        children: _buildVersionCards(_games ?? []))
+                    : Center(
+                        child: Text(t(context, 'no_games_installed'),
+                            style: Theme.of(context).textTheme.caption),
+                      ))
           ],
         ),
       )

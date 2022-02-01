@@ -37,8 +37,7 @@ class _AboutPageState extends State<AboutPage> {
     return Scaffold(
       body: Column(
         children: [
-          SubpageAppBar(
-            title: t(context, 'about')),
+          SubpageAppBar(title: t(context, 'about')),
           Expanded(
             flex: 1,
             child: SingleChildScrollView(
@@ -147,5 +146,4 @@ class _AboutPageState extends State<AboutPage> {
       ),
     );
   }
-
 }
