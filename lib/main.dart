@@ -162,9 +162,15 @@ class _HomePageState extends State<HomePage> {
     ]));
   }
 
+  void _ensureDirectories() {
+    Directory('./.minecraft').create();
+    Directory('./.minecraft/versions').create();
+    Directory('./.minecraft/assets').create();
+  }
+
   @override
   void initState() {
     super.initState();
-    Directory('./.minecraft').create();
+    _ensureDirectories();
   }
 }
