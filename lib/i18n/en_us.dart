@@ -8,15 +8,23 @@ final Map<String, String> langEnUS = {
   'manage_accounts': 'Manage Accounts',
   'manage_versions': 'Manage Versions',
   'launch': 'Launch',
+  'no_games_selected': 'No games selected',
   'install_version': 'Install a new version',
   'import_modpack': 'Import a modpack',
   'game_path': 'Game path',
   'path_current': 'Current',
   'path_official': 'Standard',
+  'delete_version': 'Delete version',
+  'delete_version?': 'Delete version?',
+  'operations': 'Operations',
+  'refresh': 'Refresh',
   'no_games_installed': 'No games installed',
   'external_version': 'External version',
+  'no_jar_version': 'Undownloaded version',
   'add_or_import': 'Add or import',
   'vanilla': 'Vanilla',
+  'cancel': 'Cancel',
+  'warn_delete_version': 'This version will be deleted permanently!',
   'disclaimer_mojang': 'Not an official Minecraft Product. '
       'Not approved by or associated with Mojang.'
 };

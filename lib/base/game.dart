@@ -1,8 +1,24 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
-import 'package:foast_launcher/i18n/localizations.dart';
 import 'package:path/path.dart' as p;
+import 'package:foast_launcher/i18n/localizations.dart';
+import 'package:flutter/material.dart';
+
+String getStandardPath() {
+  if (Platform.isWindows) {
+    return p.join('${Platform.environment['APPDATA']}', './.minecraft');
+  }
+  if (Platform.isMacOS) {
+    return '~/Library/Application Support/minecraft';
+  }
+  if (Platform.isLinux) {
+    return '~/.minecraft';
+  }
+
+  /// This should be NEVER executed
+  throw Error();
+}
 
 enum GameIcon {
   grassBlock,
@@ -15,6 +31,18 @@ enum GameIcon {
   bedrock,
   chest,
   anvil,
+}
+
+class GameData with ChangeNotifier {
+  Game _selectedGame =
+      Game(GameVersion('1.16.5', displayName: '1.16.5'), path: 'path');
+  Game get selected => _selectedGame;
+  bool standardPath = true;
+
+  set selected(Game value) {
+    _selectedGame = value;
+    notifyListeners();
+  }
 }
 
 class GameVersion {
@@ -35,11 +63,13 @@ class Game {
   final GameVersion version;
   final String path;
   final GameIcon icon;
+  final bool noJar;
   final bool empty;
   List<GameComponent> components = [];
 
   Game(this.version,
       {required this.path,
+      this.noJar = false,
       this.components = const [],
       this.icon = GameIcon.grassBlock,
       this.empty = false});
@@ -52,15 +82,19 @@ class Game {
     if (stringComponents.isEmpty) {
       stringComponents = t(context, 'vanilla');
     }
+    if (noJar) {
+      return t(context, 'no_jar_version') + '\n';
+    }
     if (version.id == null) {
-      return '${t(context, 'external_version')}\n';
+      return t(context, 'external_version') + '\n';
     }
     return 'Minecraft ${version.id}\n$stringComponents';
   }
 
-  static Future<List<Game>> loadFromPath(
-      [String rootPath = './.minecraft']) async {
-    final Directory dir = Directory(p.join(rootPath, './versions'));
+  get displayName => version.displayName;
+
+  static List<Game> loadFromPath([String rootPath = './.minecraft']) {
+    final Directory dir = Directory(p.join(rootPath, 'versions'));
     List<Game> games = dir.listSync(recursive: false).map((element) {
       try {
         final gamePath = element.path;
@@ -69,22 +103,23 @@ class Game {
         /// C:\path\to\.minecraft\versions\versionName\1.16.5.jar
         ///                       dirName: ¯¯¯¯¯¯¯¯¯¯¯
         final dirName = element.path.split(Platform.pathSeparator).last;
-        final manifestFile = File(p.join(gamePath, './$dirName.fstl'));
+        final manifestFile = File(p.join(gamePath, './.fstl'));
         final jsonFile = File(p.join(gamePath, './$dirName.json'));
         final jarFile = File(p.join(gamePath, './$dirName.jar'));
         // If json file or jar file doesn't exist, the version is invalid
-        if (!(jsonFile.existsSync() && jarFile.existsSync())) {
+        if (!jsonFile.existsSync()) {
           throw Error();
         }
         // If manifest is not exist, return unknown data
         if (!manifestFile.existsSync()) {
-          return Game(GameVersion(null, displayName: dirName), path: gamePath);
+          return Game(GameVersion(null, displayName: dirName),
+              path: gamePath, noJar: !jarFile.existsSync());
         }
         final manifest = jsonDecode(manifestFile.readAsLinesSync().join(''));
         return Game(GameVersion(manifest['id'], displayName: dirName),
-            path: gamePath);
+            path: gamePath, noJar: !jarFile.existsSync());
       } catch (e) {
-        return Game(GameVersion('', displayName: ''), path: '', empty: true);
+        return EmptyGame();
       }
     }).toList()
       ..retainWhere((element) => !element.empty);
@@ -94,4 +129,8 @@ class Game {
   launch() {
     //\\//\\//\\//\\//\\//\\//
   }
+}
+
+class EmptyGame extends Game {
+  EmptyGame() : super(GameVersion('', displayName: ''), path: '', empty: true);
 }

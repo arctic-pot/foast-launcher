@@ -1,8 +1,14 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:foast_launcher/base/game/game.dart';
+import 'package:foast_launcher/base/game.dart';
 import 'package:foast_launcher/i18n/localizations.dart';
 import 'package:foast_launcher/pages/app_bar.dart';
 import 'package:foast_launcher/pages/download_page.dart';
+import 'package:provider/provider.dart';
+
+const double _width = 285;
 
 class GamesPage extends StatefulWidget {
   const GamesPage({Key? key}) : super(key: key);
@@ -11,15 +17,31 @@ class GamesPage extends StatefulWidget {
 }
 
 class _GamesPageState extends State<GamesPage> {
-  final double _width = 285;
-  int _radioGroupValue = 0;
-  int _selectedVersionIndex = 0;
-  List<Game>? _games = null;
+  List<Game>? _games;
 
-  void _handleChangePath(int? newValue) {
-    setState(() {
-      _radioGroupValue = newValue ?? 0;
+  void _refreshGameList({bool resetIndex = false}) {
+    // Versions could be very many, here we put it into an isolate task
+    compute(Game.loadFromPath, _getSelectedPath()).then((value) {
+      _games = value;
+      if (resetIndex) {
+        context.read<GameData>().selected =
+            value.isNotEmpty ? value[0] : EmptyGame();
+      } else {
+        // For a unknown bug
+        context.read<GameData>().selected = context.read<GameData>().selected;
+      }
     });
+  }
+
+  String _getSelectedPath() {
+    return context.read<GameData>().standardPath
+        ? getStandardPath()
+        : './.minecraft';
+  }
+
+  void _handleChangePath(bool? newValue, {bool resetIndex = true}) {
+    context.read<GameData>().standardPath = newValue!;
+    _refreshGameList(resetIndex: resetIndex);
   }
 
   Widget _buildSubtitle(String text) {
@@ -42,9 +64,12 @@ class _GamesPageState extends State<GamesPage> {
       required onTap}) {
     return Center(
       child: Card(
-        elevation: active ? 1.5 : 0,
-        //color:  ? Theme.of(context).primaryColorLight : null,
+        elevation: active ? 1 : 0,
+        color:
+            active ? Colors.white : Theme.of(context).scaffoldBackgroundColor,
         child: ListTile(
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(5))),
           selected: active,
           leading: icon,
           title: Text(title),
@@ -65,19 +90,30 @@ class _GamesPageState extends State<GamesPage> {
                   icon: Text('${game.icon.index}'),
                   title: game.version.displayName,
                   installed: game.getInstalled(context),
-                  active: _selectedVersionIndex == index,
+                  active: context.read<GameData>().selected.displayName ==
+                      _games![index].displayName,
                   onTap: () {
-                    setState(() {
-                      _selectedVersionIndex = index;
-                    });
+                    context.read<GameData>().selected = _games![index];
                   }));
         })
         .values
         .toList();
   }
 
+  void _deleteCurrentVersion() {
+    final Game? _selectedGame = context.read<GameData>().selected;
+    if (_selectedGame != null) {
+      Directory(_selectedGame.path).delete(recursive: true);
+      // Can't find a semantic name
+      context.read<GameData>().selected = _games![0];
+      _refreshGameList();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    //final _selectedGameIndex = _games?.indexWhere((game) =>
+    //game.displayName == context.read<GameData>().selected.displayName) ?? 0;
     return Scaffold(
         body: Column(children: [
       SubpageAppBar(
@@ -98,14 +134,14 @@ class _GamesPageState extends State<GamesPage> {
                       children: [
                         RadioListTile(
                           title: Text(t(context, 'path_current')),
-                          value: 0,
-                          groupValue: _radioGroupValue,
+                          value: false,
+                          groupValue: context.watch<GameData>().standardPath,
                           onChanged: _handleChangePath,
                         ),
                         RadioListTile(
                           title: Text(t(context, 'path_official')),
-                          value: 1,
-                          groupValue: _radioGroupValue,
+                          value: true,
+                          groupValue: context.watch<GameData>().standardPath,
                           onChanged: _handleChangePath,
                         ),
                       ],
@@ -127,6 +163,48 @@ class _GamesPageState extends State<GamesPage> {
                           leading: const Icon(Icons.add_circle_rounded),
                           enabled: false,
                         ),
+                      ],
+                    ),
+                    _buildSubtitle(t(context, 'operations')),
+                    ListView(
+                      shrinkWrap: true,
+                      children: [
+                        ListTile(
+                            enabled: _games != null,
+                            title: Text(t(context, 'delete_version')),
+                            leading: const Icon(Icons.delete_rounded),
+                            onTap: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                        title:
+                                            Text(t(context, 'delete_version?')),
+                                        content: Text(
+                                            t(context, 'warn_delete_version')),
+                                        actions: [
+                                          TextButton(
+                                              onPressed: () {
+                                                _deleteCurrentVersion();
+                                                Navigator.of(context).pop(true);
+                                              },
+                                              child: Text(t(
+                                                  context, 'delete_version'))),
+                                          TextButton(
+                                              onPressed: () {
+                                                Navigator.of(context).pop(true);
+                                              },
+                                              child:
+                                                  Text(t(context, 'cancel'))),
+                                        ],
+                                      ));
+                            }),
+                        ListTile(
+                            enabled: _games != null,
+                            title: Text(t(context, 'refresh')),
+                            leading: const Icon(Icons.refresh_rounded),
+                            onTap: () {
+                              _refreshGameList();
+                            }),
                       ],
                     ),
                   ],
@@ -156,8 +234,7 @@ class _GamesPageState extends State<GamesPage> {
   @override
   void initState() {
     super.initState();
-    Game.loadFromPath().then((value) => setState(() {
-          _games = value;
-        }));
+    _refreshGameList();
+    _handleChangePath(context.read<GameData>().standardPath, resetIndex: false);
   }
 }

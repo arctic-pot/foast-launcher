@@ -2,18 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:foast_launcher/i18n/localizations.dart';
 import 'package:foast_launcher/pages/accounts_page.dart';
 import 'package:foast_launcher/pages/games_page.dart';
+import 'package:foast_launcher/base/game.dart' show GameData;
+import 'package:provider/provider.dart';
 
-class LaunchPage extends StatefulWidget {
-  const LaunchPage({
-    Key? key,
-  }) : super(key: key);
-  @override
-  State<StatefulWidget> createState() => _LaunchPageState();
-}
+class LaunchPage extends StatelessWidget {
+  const LaunchPage({Key? key}) : super(key: key);
 
-class _LaunchPageState extends State<LaunchPage> {
   @override
   Widget build(BuildContext context) {
+    final selectedGame = context.watch<GameData>().selected;
+
     return Column(
       children: [
         Expanded(
@@ -62,7 +60,7 @@ class _LaunchPageState extends State<LaunchPage> {
                           height: 80,
                           width: 250,
                           child: ElevatedButton(
-                              onPressed: () {},
+                              onPressed: selectedGame.empty ? null : () {},
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -74,7 +72,9 @@ class _LaunchPageState extends State<LaunchPage> {
                                             .titleLarge
                                             ?.fontSize),
                                   ),
-                                  const Text('WIP'),
+                                  Text(selectedGame.empty
+                                      ? t(context, 'no_games_selected')
+                                      : selectedGame.displayName)
                                 ],
                               )),
                         ),

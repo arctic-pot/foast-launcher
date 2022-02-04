@@ -8,9 +8,11 @@ import 'package:foast_launcher/pages/accounts_page.dart';
 import 'package:foast_launcher/pages/download_page.dart';
 import 'package:foast_launcher/pages/games_page.dart';
 import 'package:foast_launcher/pages/launch_page.dart';
+import 'package:foast_launcher/base/game.dart' show GameData;
 import 'package:foast_launcher/pages/mods_page.dart';
 import 'package:foast_launcher/pages/online_playing_page.dart';
 import 'package:foast_launcher/pages/settings_page.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(const App());
@@ -22,34 +24,49 @@ class App extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        localizationsDelegates: [
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          AppLocalizationsDelegate.delegate
+    return MultiProvider(
+        providers: [
+          ChangeNotifierProvider<GameData>(create: (_) => GameData())
         ],
-        supportedLocales: const [
-          Locale('en', 'US'),
-          Locale('zh', 'CN'),
-        ],
-        home: const HomePage(title: 'Flutter Demo Home Page'));
+        child: MaterialApp(
+            title: 'Flutter Demo',
+            theme: ThemeData(
+              primarySwatch: Colors.blue,
+            ),
+            localizationsDelegates: [
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              AppLocalizationsDelegate.delegate
+            ],
+            supportedLocales: const [
+              Locale('en', 'US'),
+              Locale('zh', 'CN'),
+            ],
+            home: const HomePage(title: 'Flutter Demo Home Page')));
   }
 }
 
-class HomePage extends StatefulWidget {
+class HomePage extends StatelessWidget {
   const HomePage({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  Widget build(BuildContext context) {
+    return HomePageContent(title: title);
+  }
 }
 
-class _HomePageState extends State<HomePage> {
+class HomePageContent extends StatefulWidget {
+  const HomePageContent({Key? key, required this.title}) : super(key: key);
+
+  final String title;
+
+  @override
+  State<HomePageContent> createState() => _HomePageContentState();
+}
+
+class _HomePageContentState extends State<HomePageContent> {
   // region exclusive states
   // endregion
   // region top-level states, provide for some children widgets

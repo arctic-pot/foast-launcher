@@ -8,15 +8,23 @@ final Map<String, String> langZhCN = {
   'manage_accounts': '管理账号',
   'manage_versions': '管理版本',
   'launch': '启动',
+  'no_games_selected': '未选择游戏',
   'install_version': '下载一个新版本',
   'import_modpack': '导入整合包',
   'game_path': '游戏路径',
   'path_current': '当前路径',
   'no_games_installed': '无已下载的版本',
   'path_official': '官方启动器路径',
+  'delete_version': '删除版本',
+  'delete_version?': '删除版本？',
+  'operations': '操作',
+  'refresh': '刷新',
   'external_version': '外部版本',
+  'no_jar_version': '未下载的版本',
   'add_or_import': '添加或导入',
   'vanilla': '原版',
+  'cancel': '取消',
+  'warn_delete_version': '这个版本会被永久删除（真的很久！）',
   'disclaimer_mojang': '非Minecraft官方产品。'
       '未经Mojang批准，也不与Mojang关联。'
 };
