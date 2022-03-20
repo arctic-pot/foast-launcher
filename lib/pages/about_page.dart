@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:foast_launcher/i18n/localizations.dart';
+import 'package:foast_launcher/pages/body_wrapper.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:foast_launcher/pages/app_bar.dart';
 
 class AboutPage extends StatefulWidget {
   const AboutPage({Key? key}) : super(key: key);
@@ -34,10 +34,11 @@ class _AboutPageState extends State<AboutPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
+    return SubPageScaffold(
+      title: t(context, 'about'),
+      child: Column(
         children: [
-          SubpageAppBar(title: t(context, 'about')),
+          const SizedBox(width: double.infinity),
           Expanded(
             flex: 1,
             child: SingleChildScrollView(

@@ -1,9 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
-import 'package:path/path.dart' as p;
-import 'package:foast_launcher/i18n/localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:foast_launcher/i18n/localizations.dart';
+import 'package:path/path.dart' as p;
 
 String getStandardPath() {
   if (Platform.isWindows) {
@@ -36,8 +37,14 @@ enum GameIcon {
 class GameData with ChangeNotifier {
   Game _selectedGame =
       Game(GameVersion('1.16.5', displayName: '1.16.5'), path: 'path');
+  bool _standardPath = true;
   Game get selected => _selectedGame;
-  bool standardPath = true;
+  bool get standardPath => _standardPath;
+  String get selectedPath => _standardPath ? getStandardPath() : './.minecraft';
+  set standardPath(bool value) {
+    _standardPath = value;
+    notifyListeners();
+  }
 
   set selected(Game value) {
     _selectedGame = value;
@@ -83,10 +90,10 @@ class Game {
       stringComponents = t(context, 'vanilla');
     }
     if (noJar) {
-      return t(context, 'no_jar_version') + '\n';
+      return t(context, 'no_jar_version');
     }
     if (version.id == null) {
-      return t(context, 'external_version') + '\n';
+      return t(context, 'external_version');
     }
     return 'Minecraft ${version.id}\n$stringComponents';
   }
