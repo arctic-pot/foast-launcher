@@ -1,21 +1,32 @@
 import 'dart:io';
 
+import 'package:bitsdojo_window/bitsdojo_window.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:foast_launcher/base/game.dart' show GameData;
 import 'package:foast_launcher/i18n/localizations.dart';
 import 'package:foast_launcher/pages/about_page.dart';
 import 'package:foast_launcher/pages/accounts_page.dart';
+import 'package:foast_launcher/pages/app_bar.dart';
 import 'package:foast_launcher/pages/download_page.dart';
 import 'package:foast_launcher/pages/games_page.dart';
 import 'package:foast_launcher/pages/launch_page.dart';
-import 'package:foast_launcher/base/game.dart' show GameData;
 import 'package:foast_launcher/pages/mods_page.dart';
-import 'package:foast_launcher/pages/online_playing_page.dart';
+import 'package:foast_launcher/pages/multiplayer_page.dart';
+import 'package:foast_launcher/pages/server_page.dart';
 import 'package:foast_launcher/pages/settings_page.dart';
 import 'package:provider/provider.dart';
 
 void main() {
   runApp(const App());
+  doWhenWindowReady(() {
+    const initSize = Size(1025, 700);
+    appWindow.size = initSize;
+    appWindow.alignment = Alignment.center;
+    appWindow.title = 'Foast Launcher';
+    appWindow.show();
+  });
 }
 
 class App extends StatelessWidget {
@@ -32,6 +43,7 @@ class App extends StatelessWidget {
             title: 'Flutter Demo',
             theme: ThemeData(
               primarySwatch: Colors.blue,
+              iconTheme: const IconThemeData(color: Colors.black87, opacity: 1),
             ),
             localizationsDelegates: [
               GlobalMaterialLocalizations.delegate,
@@ -76,9 +88,11 @@ class _HomePageContentState extends State<HomePageContent> {
       {required String title,
       required IconData icon,
       required Widget to,
+      String? subtitle,
       bool disabled = false}) {
     return ListTile(
         title: Text(title),
+        subtitle: subtitle == null ? null : Text(subtitle),
         leading: Icon(icon),
         enabled: !disabled,
         onTap: () {
@@ -91,39 +105,9 @@ class _HomePageContentState extends State<HomePageContent> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Column(children: [
-      Container(
-        width: double.infinity,
-        height: 42.5,
-        padding: const EdgeInsets.only(left: 15),
-        decoration: BoxDecoration(color: Theme.of(context).primaryColor),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const Text('Foast Launcher',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600)),
-            Expanded(
-                flex: 1,
-                child: Padding(
-                    padding: const EdgeInsets.only(right: 15),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        TextButton(
-                          onPressed: () {
-                            exit(0);
-                          },
-                          child: const Icon(
-                            Icons.close,
-                            color: Colors.white,
-                          ),
-                        )
-                      ],
-                    )))
-          ],
-        ),
+      const CustomAppBar(
+        title: 'Home',
+        isStartPage: true,
       ),
       Expanded(
           flex: 1,
@@ -136,33 +120,36 @@ class _HomePageContentState extends State<HomePageContent> {
                   children: [
                     _buildPageSwitcher(
                         title: t(context, 'games'),
-                        icon: Icons.widgets_rounded,
+                        icon: FluentIcons.games_24_regular,
                         to: const GamesPage()),
                     _buildPageSwitcher(
                         title: t(context, 'accounts'),
-                        icon: Icons.account_circle_rounded,
+                        icon: FluentIcons.person_24_regular,
                         to: const AccountsPage()),
                     _buildPageSwitcher(
                         title: t(context, 'mods'),
-                        icon: Icons.extension_rounded,
+                        icon: FluentIcons.apps_24_regular,
                         to: const ModsPage()),
                     _buildPageSwitcher(
                         title: t(context, 'download'),
-                        icon: Icons.download_rounded,
+                        icon: FluentIcons.arrow_download_24_regular,
                         to: const DownloadPage()),
                     _buildPageSwitcher(
-                        title: 'Online Playing',
-                        disabled: true,
-                        icon: Icons.dns_rounded,
-                        to: const OnlinePlayingPage()),
+                        title: 'Server',
+                        icon: FluentIcons.server_24_regular,
+                        to: const ServerPage()),
+                    _buildPageSwitcher(
+                        title: 'Multiplayer',
+                        icon: FluentIcons.people_24_regular,
+                        to: const MultiplayerPage()),
                     const Divider(),
                     _buildPageSwitcher(
                         title: t(context, 'settings'),
-                        icon: Icons.settings_rounded,
+                        icon: FluentIcons.settings_24_regular,
                         to: const SettingsPage()),
                     _buildPageSwitcher(
                         title: t(context, 'about'),
-                        icon: Icons.info_rounded,
+                        icon: FluentIcons.info_24_regular,
                         to: const AboutPage())
                   ],
                 ),
