@@ -26,13 +26,13 @@ jobs:
           version: stable
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Build release
-        run: |
-          flutter pub get
-          flutter build windows --release
-      - name: Upload a Build Artifact
-        uses: actions/upload-artifact@v3.0.0
-        with: 
-          path: build/windows/runner/release
-          name: Master Build
+#      - name: Build release
+#        run: |
+#          flutter pub get
+#          flutter build windows --release
+#      - name: Upload a Build Artifact
+#        uses: actions/upload-artifact@v3.0.0
+#        with:
+#          path: build/windows/runner/release
+#          name: Master Build
 
