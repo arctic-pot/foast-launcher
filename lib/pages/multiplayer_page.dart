@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:foast_launcher/i18n/localizations.dart';
+import 'package:foast_launcher/localizations.dart';
 import 'package:foast_launcher/pages/body_wrapper.dart';
 
 class MultiplayerPage extends StatelessWidget {
@@ -8,7 +8,7 @@ class MultiplayerPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SubPageScaffold(
-      title: t(context, 'multiplayer'),
+      title: l10n(context).multiplayer,
       child: Column(
         children: const [Text('WIP')],
       ),

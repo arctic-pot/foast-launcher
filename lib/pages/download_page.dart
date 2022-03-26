@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:foast_launcher/common.dart';
-import 'package:foast_launcher/i18n/localizations.dart';
+import 'package:foast_launcher/localizations.dart';
 import 'package:foast_launcher/pages/body_wrapper.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
@@ -44,7 +44,7 @@ class DownloadPage extends StatelessWidget {
       required DownloadTab id,
       required IconData icon}) {
     return ListTile(
-      title: Text(t(context, title)),
+      title: Text(title),
       selected: context.watch<SelectedTab>().value == id,
       onTap: () => context.read<SelectedTab>().value = id,
       leading: Icon(icon),
@@ -59,7 +59,7 @@ class DownloadPage extends StatelessWidget {
             create: (_) => SelectedTab(initPage ?? DownloadTab.empty))
       ],
       builder: (context, _) => SubPageScaffold(
-        title: t(context, 'download'),
+        title: l10n(context).download,
         child: Row(children: [
           // DefaultTabController(
           //   length: 4,
@@ -99,37 +99,37 @@ class DownloadPage extends StatelessWidget {
                 children: [
                   _buildTab(
                     context,
-                    title: 'games',
+                    title: l10n(context).games,
                     id: DownloadTab.games,
                     icon: FluentIcons.games_24_regular,
                   ),
                   _buildTab(
                     context,
-                    title: 'mods',
+                    title: l10n(context).mods,
                     id: DownloadTab.mods,
                     icon: FluentIcons.apps_24_regular,
                   ),
                   _buildTab(
                     context,
-                    title: 'mod_packs',
+                    title: l10n(context).modPacks,
                     id: DownloadTab.modPacks,
                     icon: FluentIcons.backpack_24_regular,
                   ),
                   _buildTab(
                     context,
-                    title: 'res_packs',
+                    title: l10n(context).resPacks,
                     id: DownloadTab.resPacks,
                     icon: FluentIcons.grid_24_regular,
                   ),
                   _buildTab(
                     context,
-                    title: 'shader_packs',
+                    title: l10n(context).shaderPacks,
                     id: DownloadTab.shader,
                     icon: FluentIcons.shape_subtract_24_regular,
                   ),
                   _buildTab(
                     context,
-                    title: 'server_core',
+                    title: l10n(context).serverCore,
                     id: DownloadTab.serverCore,
                     icon: FluentIcons.server_24_regular,
                   ),
@@ -167,8 +167,8 @@ class _DownloadPageGamesPart extends StatelessWidget {
     final Map<String, dynamic> manifest =
         context.watch<VersionManifest>().value!;
     final List<dynamic> versions = List.from(manifest['versions']);
-    final String releasedAt = t(context, 'released_at');
-    final String unsecure = t(context, 'unsecure_version');
+    final String releasedAt = l10n(context).releasedAt;
+    final String unsecure = l10n(context).unsecureVersion;
     versions.retainWhere((element) => element['type'] == type);
     return versions.map((version) {
       final releaseTime = DateTime.parse(version['releaseTime'])
@@ -198,7 +198,7 @@ class _DownloadPageGamesPart extends StatelessWidget {
           initialData: VersionManifest(null),
           builder: (context, _) => context.watch<VersionManifest>().value ==
                   null
-              ? Center(child: Text(t(context, 'loading')))
+              ? Center(child: Text(l10n(context).loading))
               : SingleChildScrollView(
                   controller: ScrollController(),
                   child: Container(
@@ -211,7 +211,7 @@ class _DownloadPageGamesPart extends StatelessWidget {
                           children: [
                             ExpansionPanelRadio(
                                 headerBuilder: (context, __) => ListTile(
-                                    title: Text(t(context, 'releases'))),
+                                    title: Text(l10n(context).releases)),
                                 body: ListView(
                                     shrinkWrap: true,
                                     children:
@@ -219,7 +219,7 @@ class _DownloadPageGamesPart extends StatelessWidget {
                                 value: 0),
                             ExpansionPanelRadio(
                                 headerBuilder: (context, __) => ListTile(
-                                    title: Text(t(context, 'snapshots'))),
+                                    title: Text(l10n(context).snapshots)),
                                 body: ListView(
                                     shrinkWrap: true,
                                     children:
@@ -227,7 +227,7 @@ class _DownloadPageGamesPart extends StatelessWidget {
                                 value: 1),
                             ExpansionPanelRadio(
                                 headerBuilder: (context, __) =>
-                                    ListTile(title: Text(t(context, 'old'))),
+                                    ListTile(title: Text(l10n(context).old)),
                                 body: ListView(shrinkWrap: true, children: [
                                   ..._buildGameList('old_beta', context),
                                   ..._buildGameList('old_alpha', context),
@@ -260,7 +260,7 @@ class _DownloadPageJavaPart extends StatelessWidget {
             const Divider(),
             Row(
               children: [
-                Text(t(context, 'distributor') + ': '),
+                Text(l10n(context).distributor + ': '),
                 const SizedBox(width: 5),
                 TextButton(onPressed: () {}, child: const Text('BellSoft')),
                 const SizedBox(width: 5),

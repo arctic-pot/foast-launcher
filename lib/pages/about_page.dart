@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:foast_launcher/i18n/localizations.dart';
+import 'package:foast_launcher/localizations.dart';
 import 'package:foast_launcher/pages/body_wrapper.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -35,7 +35,7 @@ class _AboutPageState extends State<AboutPage> {
   @override
   Widget build(BuildContext context) {
     return SubPageScaffold(
-      title: t(context, 'about'),
+      title: l10n(context).about,
       child: Column(
         children: [
           const SizedBox(width: double.infinity),
@@ -53,7 +53,7 @@ class _AboutPageState extends State<AboutPage> {
                       style: Theme.of(context).textTheme.headline5,
                     ),
                     Text(
-                      t(context, 'disclaimer_mojang'),
+                      l10n(context).disclaimerMojang,
                       style: Theme.of(context).textTheme.caption,
                     ),
                   ],

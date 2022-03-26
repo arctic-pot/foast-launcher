@@ -18,6 +18,25 @@ ThemeData navigationDrawerStyle(BuildContext context) => ThemeData(
       ),
     );
 
-void navigateWidget(BuildContext context, builder) {
-  Navigator.of(context).push(MaterialPageRoute(builder: builder));
+void navigateToWidget(BuildContext context, Widget widget) {
+  Navigator.of(context).push(PageRouteBuilder(
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      final slideTween = Tween(
+        begin: const Offset(-1.0, 0.0),
+        end: Offset.zero,
+      ).chain(CurveTween(curve: Curves.fastOutSlowIn));
+      final fadeTween = Tween(
+        begin: 0.0,
+        end: 1.0,
+      );
+      return SlideTransition(
+        position: animation.drive(slideTween),
+        child: FadeTransition(
+          opacity: animation.drive(fadeTween),
+          child: child,
+        ),
+      );
+    },
+    pageBuilder: (context, _, __) => widget,
+  ));
 }

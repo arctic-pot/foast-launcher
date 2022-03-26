@@ -27,6 +27,7 @@ class VersionList extends StatelessWidget {
       child: ListView(
         children: (games ?? []).map((version) {
           return ListTile(
+            leading: Text(version.icon.index.toString()),
             title: Text(version.displayName),
             subtitle: Text(version.getInstalled(context)),
             onTap: () {

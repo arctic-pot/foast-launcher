@@ -6,9 +6,9 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final String title;
+  final String? title;
   final bool isStartPage;
-  const CustomAppBar({Key? key, required this.title, this.isStartPage = false})
+  const CustomAppBar({Key? key, this.title, this.isStartPage = false})
       : super(key: key);
   static const double height = 50;
 
@@ -64,7 +64,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                     if (isStartPage) const SizedBox(width: 5),
                     // Title
                     Text(
-                      'Foast Launcher | $title',
+                      title ?? 'Foast Launcher',
                       style: const TextStyle(
                           color: Colors.white,
                           fontSize: 18,
@@ -74,7 +74,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 ),
               ),
             ),
-            _buildButton(
+            if (isStartPage) _buildButton(
               child: const Icon(FluentIcons.dismiss_24_regular),
               onClick: () {
                 exit(0);

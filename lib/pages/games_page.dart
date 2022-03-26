@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:foast_launcher/base/game.dart';
 import 'package:foast_launcher/common.dart';
-import 'package:foast_launcher/i18n/localizations.dart';
+import 'package:foast_launcher/localizations.dart';
 import 'package:foast_launcher/pages/body_wrapper.dart';
 import 'package:foast_launcher/pages/download_page.dart';
 import 'package:foast_launcher/pages/version_list.dart';
@@ -60,20 +60,20 @@ class _GamesPageState extends State<GamesPage> {
   }
 
   Widget _alertDelete(BuildContext context) => AlertDialog(
-        title: Text(t(context, 'delete_version?')),
-        content: Text(t(context, 'warn_delete_version')),
+        title: Text(l10n(context).deleteVersionAsk),
+        content: Text(l10n(context).warnDeleteVersion),
         actions: [
           TextButton(
               onPressed: () {
                 _deleteCurrentVersion();
                 Navigator.of(context).pop(true);
               },
-              child: Text(t(context, 'delete_version'))),
+              child: Text(l10n(context).deleteVersion)),
           TextButton(
               onPressed: () {
                 Navigator.of(context).pop(true);
               },
-              child: Text(t(context, 'cancel'))),
+              child: Text(l10n(context).cancel)),
         ],
       );
 
@@ -136,7 +136,7 @@ class _GamesPageState extends State<GamesPage> {
     //final _selectedGameIndex = _games?.indexWhere((game) =>
     //game.displayName == context.read<GameData>().selected.displayName) ?? 0;
     return SubPageScaffold(
-      title: t(context, 'games'),
+      title: l10n(context).games,
       child: Column(children: [
         Expanded(
           flex: 1,
@@ -147,14 +147,14 @@ class _GamesPageState extends State<GamesPage> {
                   width: _width,
                   child: Column(
                     children: [
-                      _buildSubtitle(t(context, 'game_path')),
+                      _buildSubtitle(l10n(context).gamePath),
                       Theme(
                         data: navigationDrawerStyle(context),
                         child: ListView(
                           shrinkWrap: true,
                           children: [
                             ListTile(
-                              title: Text(t(context, 'path_current')),
+                              title: Text(l10n(context).pathCurrent),
                               selected: !context.watch<GameData>().standardPath,
                               onTap: () {
                                 context.read<GameData>().standardPath = false;
@@ -162,7 +162,7 @@ class _GamesPageState extends State<GamesPage> {
                               },
                             ),
                             ListTile(
-                              title: Text(t(context, 'path_official')),
+                              title: Text(l10n(context).pathOfficial),
                               selected: context.watch<GameData>().standardPath,
                               onTap: () {
                                 context.read<GameData>().standardPath = true;
@@ -172,34 +172,41 @@ class _GamesPageState extends State<GamesPage> {
                           ],
                         ),
                       ),
-                      _buildSubtitle(t(context, 'add_or_import')),
+                      _buildSubtitle(l10n(context).addOrImport),
                       ListView(
                         shrinkWrap: true,
                         children: [
                           ListTile(
-                            title: Text(t(context, 'install_version')),
+                            title: Text(l10n(context).addGamePath),
+                            leading: const Icon(
+                                FluentIcons.folder_add_24_regular),
+                            enabled: false,
+                          ),
+                          ListTile(
+                            title: Text(l10n(context).installVersion),
                             leading: const Icon(
                                 FluentIcons.arrow_download_24_regular),
                             onTap: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => const DownloadPage(
-                                      initPage: DownloadTab.games)));
+                              navigateToWidget(
+                                  context,
+                                  const DownloadPage(
+                                      initPage: DownloadTab.games));
                             },
                           ),
                           ListTile(
-                            title: Text(t(context, 'import_modpack')),
+                            title: Text(l10n(context).importModpack),
                             leading: const Icon(FluentIcons.add_24_regular),
                             enabled: false,
                           ),
                         ],
                       ),
-                      _buildSubtitle(t(context, 'operations')),
+                      _buildSubtitle(l10n(context).operations),
                       ListView(
                         shrinkWrap: true,
                         children: [
                           ListTile(
                               enabled: _games != null,
-                              title: Text(t(context, 'delete_version')),
+                              title: Text(l10n(context).deleteVersion),
                               leading:
                                   const Icon(FluentIcons.delete_24_regular),
                               onTap: () {
@@ -208,7 +215,7 @@ class _GamesPageState extends State<GamesPage> {
                               }),
                           ListTile(
                               enabled: _games != null,
-                              title: Text(t(context, 'refresh')),
+                              title: Text(l10n(context).refresh),
                               leading: const Icon(
                                   FluentIcons.arrow_clockwise_24_regular),
                               onTap: () {
@@ -244,7 +251,7 @@ class _GamesPageState extends State<GamesPage> {
                               context.read<GameData>().selected = version,
                         )
                       : Center(
-                          child: Text(t(context, 'no_games_installed'),
+                          child: Text(l10n(context).noGamesInstalled,
                               style: Theme.of(context).textTheme.caption),
                         ))
             ],
@@ -259,7 +266,8 @@ class _GamesPageState extends State<GamesPage> {
     super.initState();
     Future.delayed(const Duration(milliseconds: 50), () {
       _refreshGameList();
-      _handleChangePath(context.read<GameData>().standardPath, resetIndex: false);
+      _handleChangePath(context.read<GameData>().standardPath,
+          resetIndex: false);
     });
   }
 }

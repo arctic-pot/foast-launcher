@@ -3,9 +3,10 @@ import 'dart:io';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:foast_launcher/base/game.dart' show GameData;
-import 'package:foast_launcher/i18n/localizations.dart';
+import 'package:foast_launcher/common.dart';
+import 'package:foast_launcher/localizations.dart';
 import 'package:foast_launcher/pages/about_page.dart';
 import 'package:foast_launcher/pages/accounts_page.dart';
 import 'package:foast_launcher/pages/app_bar.dart';
@@ -45,15 +46,8 @@ class App extends StatelessWidget {
               primarySwatch: Colors.blue,
               iconTheme: const IconThemeData(color: Colors.black87, opacity: 1),
             ),
-            localizationsDelegates: [
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              AppLocalizationsDelegate.delegate
-            ],
-            supportedLocales: const [
-              Locale('en', 'US'),
-              Locale('zh', 'CN'),
-            ],
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
             home: const HomePage(title: 'Flutter Demo Home Page')));
   }
 }
@@ -96,8 +90,7 @@ class _HomePageContentState extends State<HomePageContent> {
         leading: Icon(icon),
         enabled: !disabled,
         onTap: () {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => to));
+          navigateToWidget(context, to);
         });
   }
 
@@ -106,7 +99,6 @@ class _HomePageContentState extends State<HomePageContent> {
     return Scaffold(
         body: Column(children: [
       const CustomAppBar(
-        title: 'Home',
         isStartPage: true,
       ),
       Expanded(
@@ -119,36 +111,36 @@ class _HomePageContentState extends State<HomePageContent> {
                 child: ListView(
                   children: [
                     _buildPageSwitcher(
-                        title: t(context, 'games'),
+                        title: l10n(context).games,
                         icon: FluentIcons.games_24_regular,
                         to: const GamesPage()),
                     _buildPageSwitcher(
-                        title: t(context, 'accounts'),
+                        title: l10n(context).accounts,
                         icon: FluentIcons.person_24_regular,
                         to: const AccountsPage()),
                     _buildPageSwitcher(
-                        title: t(context, 'mods'),
+                        title: l10n(context).mods,
                         icon: FluentIcons.apps_24_regular,
                         to: const ModsPage()),
                     _buildPageSwitcher(
-                        title: t(context, 'download'),
+                        title: l10n(context).download,
                         icon: FluentIcons.arrow_download_24_regular,
                         to: const DownloadPage()),
                     _buildPageSwitcher(
-                        title: 'Server',
+                        title: l10n(context).server,
                         icon: FluentIcons.server_24_regular,
                         to: const ServerPage()),
                     _buildPageSwitcher(
-                        title: 'Multiplayer',
+                        title: l10n(context).multiplayer,
                         icon: FluentIcons.people_24_regular,
                         to: const MultiplayerPage()),
                     const Divider(),
                     _buildPageSwitcher(
-                        title: t(context, 'settings'),
+                        title: l10n(context).settings,
                         icon: FluentIcons.settings_24_regular,
                         to: const SettingsPage()),
                     _buildPageSwitcher(
-                        title: t(context, 'about'),
+                        title: l10n(context).about,
                         icon: FluentIcons.info_24_regular,
                         to: const AboutPage())
                   ],

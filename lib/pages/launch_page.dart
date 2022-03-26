@@ -2,7 +2,8 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:foast_launcher/base/game.dart' show Game, GameData;
-import 'package:foast_launcher/i18n/localizations.dart';
+import 'package:foast_launcher/common.dart';
+import 'package:foast_launcher/localizations.dart';
 import 'package:foast_launcher/pages/accounts_page.dart';
 import 'package:foast_launcher/pages/games_page.dart';
 import 'package:foast_launcher/pages/version_list.dart';
@@ -15,7 +16,7 @@ class LaunchPage extends StatelessWidget {
     showDialog(
       context: context,
       builder: (context) => SimpleDialog(
-        title: Text(t(context, 'select_version')),
+        title: Text(l10n(context).selectVersion),
         children: [
           SizedBox(
             width: 500,
@@ -40,10 +41,9 @@ class LaunchPage extends StatelessWidget {
                 OutlinedButton(
                     onPressed: () {
                       Navigator.of(context).pop();
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => const GamesPage()));
+                      navigateToWidget(context, const GamesPage());
                     },
-                    child: Text(t(context, 'manage_versions')))
+                    child: Text(l10n(context).manageVersions))
               ],
             ),
           )
@@ -79,8 +79,7 @@ class LaunchPage extends StatelessWidget {
                                   _popupVersionSelector(context);
                                 },
                                 icon: const Icon(FluentIcons.games_24_regular),
-                                label: Text(AppLocalizations.of(context)
-                                    .getTranslation('select_version')),
+                                label: Text(l10n(context).selectVersion),
                               ),
                             ),
                             const SizedBox(height: 10),
@@ -89,13 +88,11 @@ class LaunchPage extends StatelessWidget {
                               width: 180,
                               child: OutlinedButton.icon(
                                 onPressed: () {
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) =>
-                                          const AccountsPage()));
+                                  navigateToWidget(
+                                      context, const AccountsPage());
                                 },
                                 icon: const Icon(FluentIcons.person_24_regular),
-                                label: Text(AppLocalizations.of(context)
-                                    .getTranslation('manage_accounts')),
+                                label: Text(l10n(context).manageAccounts),
                               ),
                             ),
                           ],
@@ -110,7 +107,7 @@ class LaunchPage extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  t(context, 'launch'),
+                                  l10n(context).launch,
                                   style: TextStyle(
                                       fontSize: Theme.of(context)
                                           .textTheme
@@ -118,7 +115,7 @@ class LaunchPage extends StatelessWidget {
                                           ?.fontSize),
                                 ),
                                 Text(selectedGame.empty
-                                    ? t(context, 'no_games_selected')
+                                    ? l10n(context).noGamesSelected
                                     : selectedGame.displayName)
                               ],
                             ),

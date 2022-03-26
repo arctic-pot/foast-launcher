@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:foast_launcher/i18n/localizations.dart';
+import 'package:foast_launcher/localizations.dart';
 import 'package:path/path.dart' as p;
 
 String getStandardPath() {
@@ -87,13 +87,13 @@ class Game {
         .toList()
         .join(', ');
     if (stringComponents.isEmpty) {
-      stringComponents = t(context, 'vanilla');
+      stringComponents = l10n(context).vanilla;
     }
     if (noJar) {
-      return t(context, 'no_jar_version');
+      return l10n(context).noJarVersion;
     }
     if (version.id == null) {
-      return t(context, 'external_version');
+      return l10n(context).externalVersion;
     }
     return 'Minecraft ${version.id}\n$stringComponents';
   }
