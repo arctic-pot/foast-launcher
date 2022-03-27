@@ -19,7 +19,7 @@ import 'package:foast_launcher/pages/server_page.dart';
 import 'package:foast_launcher/pages/settings_page.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+void main() async {
   runApp(const App());
   doWhenWindowReady(() {
     const initSize = Size(1025, 700);
@@ -37,18 +37,19 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-        providers: [
-          ChangeNotifierProvider<GameData>(create: (_) => GameData())
-        ],
-        child: MaterialApp(
-            title: 'Flutter Demo',
-            theme: ThemeData(
-              primarySwatch: Colors.blue,
-              iconTheme: const IconThemeData(color: Colors.black87, opacity: 1),
-            ),
-            localizationsDelegates: AppLocalizations.localizationsDelegates,
-            supportedLocales: AppLocalizations.supportedLocales,
-            home: const HomePage(title: 'Flutter Demo Home Page')));
+      providers: [ChangeNotifierProvider<GameData>(create: (_) => GameData())],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+          iconTheme: const IconThemeData(color: Colors.black87, opacity: 1),
+        ),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: const HomePage(title: 'Foast Launcher'),
+      ),
+    );
   }
 }
 
