@@ -18,6 +18,10 @@ ThemeData navigationDrawerStyle(BuildContext context) => ThemeData(
       ),
     );
 
+class GameRunning extends SingleValueChangeNotifier {
+  GameRunning(bool initValue) : super(initValue);
+}
+
 void navigateToWidget(BuildContext context, Widget widget) {
   Navigator.of(context).push(PageRouteBuilder(
     transitionsBuilder: (context, animation, secondaryAnimation, child) {

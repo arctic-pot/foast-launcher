@@ -11,13 +11,10 @@ class ServerPage extends StatefulWidget {
 class _ServerPageState extends State<ServerPage> {
   @override
   Widget build(BuildContext context) {
-    return SubPageScaffold(
-      title: l10n(context).server,
-      child: Column(
-        children: const [
-          Expanded(flex: 1, child: Text('WIP'))
-        ],
-      ),
+    return Column(
+      children: const [
+        Expanded(flex: 1, child: Text('WIP'))
+      ],
     );
   }
 }

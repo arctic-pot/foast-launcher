@@ -15,7 +15,7 @@ class SubPageScaffold extends StatelessWidget {
     return RawKeyboardListener(
       focusNode: focusNode,
       child: Scaffold(
-        appBar: CustomAppBar(title: title),
+        appBar: FoastAppBar(title: title),
         body: child,
       ),
       onKey: (event) {

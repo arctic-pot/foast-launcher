@@ -133,6 +133,15 @@ class Game {
     return games;
   }
 
+  static Game generate(
+      {required String id,
+      required String displayName,
+      required String path,
+      required bool installed}) {
+    return Game(GameVersion(id, displayName: displayName),
+        path: path, noJar: !installed);
+  }
+
   launch() {
     //\\//\\//\\//\\//\\//\\//
   }

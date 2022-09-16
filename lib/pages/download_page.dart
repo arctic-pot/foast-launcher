@@ -58,100 +58,97 @@ class DownloadPage extends StatelessWidget {
         ChangeNotifierProvider<SelectedTab>(
             create: (_) => SelectedTab(initPage ?? DownloadTab.empty))
       ],
-      builder: (context, _) => SubPageScaffold(
-        title: l10n(context).download,
-        child: Row(children: [
-          // DefaultTabController(
-          //   length: 4,
-          //   child: TabBar(
-          //     onTap: (int index) {
-          //       context.read<SelectedTab>().value = index;
-          //     },
-          //     unselectedLabelColor:
-          //         Theme.of(context).textTheme.caption?.color,
-          //     labelColor: Theme.of(context).primaryColor,
-          //     tabs: const [
-          //       Tab(
-          //         ,
-          //         child: Text('Game'),
-          //       ),
-          //       Tab(
-          //         icon: Icon(Icons.extension_rounded),
-          //         child: Text('Mods'),
-          //       ),
-          //       Tab(
-          //         icon: Icon(Icons.inventory_2_rounded),
-          //         child: Text('Mod Packs'),
-          //       ),
-          //       Tab(
-          //         icon: Icon(Icons.texture_rounded),
-          //         child: Text('Resource Packs'),
-          //       ),
-          //     ],
-          //   ),
-          // ),
-          Theme(
-            data: navigationDrawerStyle(context),
-            child: SizedBox(
-              width: 200,
-              height: double.maxFinite,
-              child: ListView(
-                children: [
-                  _buildTab(
-                    context,
-                    title: l10n(context).games,
-                    id: DownloadTab.games,
-                    icon: FluentIcons.games_24_regular,
-                  ),
-                  _buildTab(
-                    context,
-                    title: l10n(context).mods,
-                    id: DownloadTab.mods,
-                    icon: FluentIcons.apps_24_regular,
-                  ),
-                  _buildTab(
-                    context,
-                    title: l10n(context).modPacks,
-                    id: DownloadTab.modPacks,
-                    icon: FluentIcons.backpack_24_regular,
-                  ),
-                  _buildTab(
-                    context,
-                    title: l10n(context).resPacks,
-                    id: DownloadTab.resPacks,
-                    icon: FluentIcons.grid_24_regular,
-                  ),
-                  _buildTab(
-                    context,
-                    title: l10n(context).shaderPacks,
-                    id: DownloadTab.shader,
-                    icon: FluentIcons.shape_subtract_24_regular,
-                  ),
-                  _buildTab(
-                    context,
-                    title: l10n(context).serverCore,
-                    id: DownloadTab.serverCore,
-                    icon: FluentIcons.server_24_regular,
-                  ),
-                  _buildTab(
-                    context,
-                    title: 'java',
-                    id: DownloadTab.java,
-                    icon: FluentIcons.drink_coffee_24_regular,
-                  ),
-                ],
-              ),
+      builder: (context, _) => Row(children: [
+        // DefaultTabController(
+        //   length: 4,
+        //   child: TabBar(
+        //     onTap: (int index) {
+        //       context.read<SelectedTab>().value = index;
+        //     },
+        //     unselectedLabelColor:
+        //         Theme.of(context).textTheme.caption?.color,
+        //     labelColor: Theme.of(context).primaryColor,
+        //     tabs: const [
+        //       Tab(
+        //         ,
+        //         child: Text('Game'),
+        //       ),
+        //       Tab(
+        //         icon: Icon(Icons.extension_rounded),
+        //         child: Text('Mods'),
+        //       ),
+        //       Tab(
+        //         icon: Icon(Icons.inventory_2_rounded),
+        //         child: Text('Mod Packs'),
+        //       ),
+        //       Tab(
+        //         icon: Icon(Icons.texture_rounded),
+        //         child: Text('Resource Packs'),
+        //       ),
+        //     ],
+        //   ),
+        // ),
+        Theme(
+          data: navigationDrawerStyle(context),
+          child: SizedBox(
+            width: 200,
+            height: double.maxFinite,
+            child: ListView(
+              children: [
+                _buildTab(
+                  context,
+                  title: l10n(context).games,
+                  id: DownloadTab.games,
+                  icon: FluentIcons.games_24_regular,
+                ),
+                _buildTab(
+                  context,
+                  title: l10n(context).mods,
+                  id: DownloadTab.mods,
+                  icon: FluentIcons.apps_24_regular,
+                ),
+                _buildTab(
+                  context,
+                  title: l10n(context).modPacks,
+                  id: DownloadTab.modPacks,
+                  icon: FluentIcons.backpack_24_regular,
+                ),
+                _buildTab(
+                  context,
+                  title: l10n(context).resPacks,
+                  id: DownloadTab.resPacks,
+                  icon: FluentIcons.grid_24_regular,
+                ),
+                _buildTab(
+                  context,
+                  title: l10n(context).shaderPacks,
+                  id: DownloadTab.shader,
+                  icon: FluentIcons.shape_subtract_24_regular,
+                ),
+                _buildTab(
+                  context,
+                  title: l10n(context).serverCore,
+                  id: DownloadTab.serverCore,
+                  icon: FluentIcons.server_24_regular,
+                ),
+                _buildTab(
+                  context,
+                  title: 'java',
+                  id: DownloadTab.java,
+                  icon: FluentIcons.drink_coffee_24_regular,
+                ),
+              ],
             ),
           ),
-          const VerticalDivider(width: 1),
-          ({
-                DownloadTab.empty: _EmptyPart(),
-                DownloadTab.java: _DownloadPageJavaPart(),
-                DownloadTab.games: _DownloadPageGamesPart(),
-              }[context.watch<SelectedTab>().value] ??
-              _WIPPart())
-        ]),
-      ),
+        ),
+        const VerticalDivider(width: 1),
+        ({
+              DownloadTab.empty: _EmptyPart(),
+              DownloadTab.java: _DownloadPageJavaPart(),
+              DownloadTab.games: _DownloadPageGamesPart(),
+            }[context.watch<SelectedTab>().value] ??
+            _WIPPart())
+      ]),
     ));
   }
 }

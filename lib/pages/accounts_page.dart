@@ -11,13 +11,13 @@ class AccountsPage extends StatefulWidget {
 class _AccountsPageState extends State<AccountsPage> {
   @override
   Widget build(BuildContext context) {
-    return SubPageScaffold(
-      title: l10n(context).accounts,
-      child: Column(
-        children: const [
-          Expanded(flex: 1, child: Text('WIP'))
-        ],
-      ),
+    return Column(
+      children: const [
+        // do it later
+        Expanded(flex: 1, child: Text('Microsoft')),
+        Expanded(flex: 1, child: Text('Offline')),
+        Expanded(flex: 1, child: Text('Authlib')),
+      ],
     );
   }
 }

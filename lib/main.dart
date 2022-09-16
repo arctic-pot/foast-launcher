@@ -7,16 +7,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:foast_launcher/base/game.dart' show GameData;
 import 'package:foast_launcher/common.dart';
 import 'package:foast_launcher/localizations.dart';
-import 'package:foast_launcher/pages/about_page.dart';
-import 'package:foast_launcher/pages/accounts_page.dart';
 import 'package:foast_launcher/pages/app_bar.dart';
-import 'package:foast_launcher/pages/download_page.dart';
-import 'package:foast_launcher/pages/games_page.dart';
-import 'package:foast_launcher/pages/launch_page.dart';
-import 'package:foast_launcher/pages/mods_page.dart';
-import 'package:foast_launcher/pages/multiplayer_page.dart';
-import 'package:foast_launcher/pages/server_page.dart';
-import 'package:foast_launcher/pages/settings_page.dart';
+import 'package:foast_launcher/pages/navigation.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -37,7 +29,12 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [ChangeNotifierProvider<GameData>(create: (_) => GameData())],
+      providers: [
+        ChangeNotifierProvider<GameData>(create: (_) => GameData()),
+        ChangeNotifierProvider<ShowingPage>(
+            create: (_) => ShowingPage(SubPage.home)),
+        ChangeNotifierProvider<GameRunning>(create: (_) => GameRunning(false))
+      ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
@@ -74,89 +71,129 @@ class HomePageContent extends StatefulWidget {
 }
 
 class _HomePageContentState extends State<HomePageContent> {
-  // region exclusive states
-  // endregion
-  // region top-level states, provide for some children widgets
-  // endregion
-
   Widget _buildPageSwitcher(
       {required String title,
       required IconData icon,
-      required Widget to,
+      required SubPage to,
       String? subtitle,
       bool disabled = false}) {
     return ListTile(
-        title: Text(title),
-        subtitle: subtitle == null ? null : Text(subtitle),
-        leading: Icon(icon),
-        enabled: !disabled,
-        onTap: () {
-          navigateToWidget(context, to);
-        });
+      selected: to == context.watch<ShowingPage>().value,
+      title: Text(title),
+      subtitle: subtitle == null ? null : Text(subtitle),
+      leading: Icon(icon),
+      enabled: !(context.watch<GameRunning>().value || disabled),
+      onTap: () => ShowingPage.change(context, to),
+    );
+  }
+
+  Widget _buildSidebar() {
+    return SizedBox(
+      width: 200,
+      //decoration: const BoxDecoration(color: Colors.white),
+      child: Theme(
+        data: navigationDrawerStyle(context),
+        child: Theme(
+          data: ThemeData(
+            listTileTheme: ListTileThemeData(
+              shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(4))),
+              selectedTileColor:
+                  Theme.of(context).primaryColorLight.withOpacity(0.4),
+            ),
+            splashFactory: NoSplash.splashFactory,
+          ),
+          child: ListView(
+            padding: const EdgeInsets.all(4),
+            children: [
+              _buildPageSwitcher(
+                title: l10n(context).home,
+                icon: FluentIcons.home_24_regular,
+                to: SubPage.home,
+              ),
+              _buildPageSwitcher(
+                title: l10n(context).news,
+                icon: FluentIcons.news_24_regular,
+                to: SubPage.news,
+              ),
+              _buildPageSwitcher(
+                title: l10n(context).games,
+                icon: FluentIcons.games_24_regular,
+                to: SubPage.games,
+              ),
+              _buildPageSwitcher(
+                title: l10n(context).accounts,
+                icon: FluentIcons.person_24_regular,
+                to: SubPage.accounts,
+              ),
+              _buildPageSwitcher(
+                title: l10n(context).mods,
+                icon: FluentIcons.apps_24_regular,
+                to: SubPage.mods,
+              ),
+              _buildPageSwitcher(
+                title: l10n(context).download,
+                icon: FluentIcons.arrow_download_24_regular,
+                to: SubPage.download,
+              ),
+              _buildPageSwitcher(
+                title: l10n(context).server,
+                icon: FluentIcons.server_24_regular,
+                to: SubPage.server,
+              ),
+              _buildPageSwitcher(
+                title: l10n(context).multiplayer,
+                icon: FluentIcons.people_24_regular,
+                to: SubPage.multiplayer,
+              ),
+              const Divider(),
+              _buildPageSwitcher(
+                  title: l10n(context).settings,
+                  icon: FluentIcons.settings_24_regular,
+                  to: SubPage.settings),
+              _buildPageSwitcher(
+                  title: l10n(context).about,
+                  icon: FluentIcons.info_24_regular,
+                  to: SubPage.about)
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Column(children: [
-      const CustomAppBar(
-        isStartPage: true,
+      body: Column(
+        children: [
+          const FoastAppBar(
+            isStartPage: true,
+          ),
+          Expanded(
+              flex: 1,
+              child: Row(
+                children: [
+                  _buildSidebar(),
+                  const VerticalDivider(
+                    width: 1,
+                  ),
+                  Expanded(
+                      flex: 1,
+                      // Simple `if` statement
+                      child: AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 300),
+                        transitionBuilder: (child, animation) => FadeTransition(
+                            opacity: animation.drive(Tween(begin: 0.0, end: 1.0)
+                                .chain(CurveTween(curve: Curves.ease))),
+                            child: child),
+                        child: context.watch<ShowingPage>().widget,
+                      ))
+                ],
+              ))
+        ],
       ),
-      Expanded(
-          flex: 1,
-          child: Row(
-            children: [
-              SizedBox(
-                width: 200,
-                //decoration: const BoxDecoration(color: Colors.white),
-                child: ListView(
-                  children: [
-                    _buildPageSwitcher(
-                        title: l10n(context).games,
-                        icon: FluentIcons.games_24_regular,
-                        to: const GamesPage()),
-                    _buildPageSwitcher(
-                        title: l10n(context).accounts,
-                        icon: FluentIcons.person_24_regular,
-                        to: const AccountsPage()),
-                    _buildPageSwitcher(
-                        title: l10n(context).mods,
-                        icon: FluentIcons.apps_24_regular,
-                        to: const ModsPage()),
-                    _buildPageSwitcher(
-                        title: l10n(context).download,
-                        icon: FluentIcons.arrow_download_24_regular,
-                        to: const DownloadPage()),
-                    _buildPageSwitcher(
-                        title: l10n(context).server,
-                        icon: FluentIcons.server_24_regular,
-                        to: const ServerPage()),
-                    _buildPageSwitcher(
-                        title: l10n(context).multiplayer,
-                        icon: FluentIcons.people_24_regular,
-                        to: const MultiplayerPage()),
-                    const Divider(),
-                    _buildPageSwitcher(
-                        title: l10n(context).settings,
-                        icon: FluentIcons.settings_24_regular,
-                        to: const SettingsPage()),
-                    _buildPageSwitcher(
-                        title: l10n(context).about,
-                        icon: FluentIcons.info_24_regular,
-                        to: const AboutPage())
-                  ],
-                ),
-              ),
-              const VerticalDivider(
-                width: 1,
-              ),
-              const Expanded(
-                  flex: 1,
-                  // Simple `if` statement
-                  child: LaunchPage())
-            ],
-          ))
-    ]));
+    );
   }
 
   void _ensureDirectories() {

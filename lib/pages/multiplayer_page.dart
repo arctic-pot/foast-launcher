@@ -7,11 +7,8 @@ class MultiplayerPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SubPageScaffold(
-      title: l10n(context).multiplayer,
-      child: Column(
-        children: const [Text('WIP')],
-      ),
+    return Column(
+      children: const [Text('WIP')],
     );
   }
 }
